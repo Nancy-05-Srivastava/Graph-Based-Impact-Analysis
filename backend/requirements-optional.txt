@@ -1,0 +1,4 @@
+torch>=2.3,<3
+torch-geometric>=2.5,<3
+neo4j>=5.20,<6
+sentence-transformers>=3.0,<4
