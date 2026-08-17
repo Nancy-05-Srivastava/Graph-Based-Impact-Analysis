@@ -1,0 +1,91 @@
+{
+  "nodes": [
+    {"id":"reg_cross_border","label":"Cross-Border Payment Regulation","type":"Regulation","risk":92,"metadata":{"jurisdiction":"MAS/RBI","effective":"2026-01-01"}},
+    {"id":"reg_kyc","label":"Digital KYC Regulation","type":"Regulation","risk":88,"metadata":{"jurisdiction":"MAS/RBI"}},
+    {"id":"reg_aml","label":"AML Monitoring Regulation","type":"Regulation","risk":95,"metadata":{"jurisdiction":"FATF/RBI"}},
+    {"id":"reg_sanctions","label":"Sanctions Screening Regulation","type":"Regulation","risk":94,"metadata":{"jurisdiction":"MAS/FATF"}},
+    {"id":"reg_data","label":"Financial Data Governance Regulation","type":"Regulation","risk":82,"metadata":{"jurisdiction":"MAS/RBI"}},
+
+    {"id":"pol_cross_border","label":"Cross-Border Payment Policy","type":"Internal Policy","risk":78},
+    {"id":"pol_kyc","label":"Customer Due Diligence Policy","type":"Internal Policy","risk":75},
+    {"id":"pol_aml","label":"AML Transaction Monitoring Policy","type":"Internal Policy","risk":86},
+    {"id":"pol_sanctions","label":"Sanctions Screening Policy","type":"Internal Policy","risk":84},
+    {"id":"pol_data","label":"Financial Data Retention Policy","type":"Internal Policy","risk":70},
+
+    {"id":"proc_payment","label":"International Payment Processing","type":"Business Process","risk":72},
+    {"id":"proc_onboarding","label":"Digital Customer Onboarding","type":"Business Process","risk":68},
+    {"id":"proc_aml","label":"Transaction Monitoring","type":"Business Process","risk":83},
+    {"id":"proc_sanctions","label":"Sanctions Screening","type":"Business Process","risk":80},
+    {"id":"proc_audit","label":"Compliance Evidence Collection","type":"Business Process","risk":62},
+
+    {"id":"api_payment","label":"Cross-Border Payment API","type":"API","risk":76},
+    {"id":"api_kyc","label":"KYC Verification API","type":"API","risk":73},
+    {"id":"api_sanctions","label":"Sanctions Screening API","type":"API","risk":81},
+    {"id":"api_monitoring","label":"Transaction Monitoring API","type":"API","risk":85},
+
+    {"id":"svc_gateway","label":"Payment Gateway Service","type":"Microservice","risk":78},
+    {"id":"svc_settlement","label":"Settlement Service","type":"Microservice","risk":75},
+    {"id":"svc_risk","label":"Risk Scoring Service","type":"Microservice","risk":82},
+
+    {"id":"db_transactions","label":"Transaction Database","type":"Database","risk":80},
+    {"id":"db_customers","label":"Customer Data Store","type":"Database","risk":70},
+    {"id":"db_audit","label":"Compliance Audit Store","type":"Database","risk":66},
+
+    {"id":"ctrl_cross_border","label":"Cross-Border Verification Control","type":"Compliance Control","risk":88},
+    {"id":"ctrl_aml","label":"AML Monitoring Control","type":"Compliance Control","risk":91},
+    {"id":"ctrl_sanctions","label":"Sanctions Screening Control","type":"Compliance Control","risk":93},
+    {"id":"ctrl_kyc","label":"KYC Validation Control","type":"Compliance Control","risk":86},
+
+    {"id":"bu_global","label":"Global Banking Business Unit","type":"Business Unit","risk":65},
+    {"id":"bu_compliance","label":"Compliance & Risk Unit","type":"Business Unit","risk":72},
+    {"id":"bu_engineering","label":"Payments Engineering Unit","type":"Business Unit","risk":62},
+
+    {"id":"audit_q4","label":"Quarterly Compliance Audit Report","type":"Audit Artifact","risk":60},
+    {"id":"audit_payment","label":"Payment Control Evidence Pack","type":"Audit Artifact","risk":64}
+  ],
+  "edges": [
+    {"source":"reg_cross_border","target":"pol_cross_border","relation":"governs","weight":1.0},
+    {"source":"pol_cross_border","target":"proc_payment","relation":"implements","weight":1.0},
+    {"source":"proc_payment","target":"api_payment","relation":"depends_on","weight":1.0},
+    {"source":"api_payment","target":"svc_gateway","relation":"calls","weight":0.9},
+    {"source":"svc_gateway","target":"svc_settlement","relation":"depends_on","weight":0.9},
+    {"source":"svc_settlement","target":"db_transactions","relation":"writes_to","weight":0.9},
+    {"source":"proc_payment","target":"ctrl_cross_border","relation":"validated_by","weight":1.0},
+    {"source":"ctrl_cross_border","target":"audit_payment","relation":"audited_by","weight":0.9},
+    {"source":"audit_payment","target":"db_audit","relation":"stored_in","weight":0.8},
+    {"source":"proc_payment","target":"bu_global","relation":"owned_by","weight":0.8},
+    {"source":"api_payment","target":"bu_engineering","relation":"maintained_by","weight":0.8},
+    {"source":"ctrl_cross_border","target":"bu_compliance","relation":"owned_by","weight":0.8},
+
+    {"source":"reg_kyc","target":"pol_kyc","relation":"governs","weight":1.0},
+    {"source":"pol_kyc","target":"proc_onboarding","relation":"implements","weight":1.0},
+    {"source":"proc_onboarding","target":"api_kyc","relation":"depends_on","weight":1.0},
+    {"source":"api_kyc","target":"db_customers","relation":"reads_from","weight":0.8},
+    {"source":"proc_onboarding","target":"ctrl_kyc","relation":"validated_by","weight":1.0},
+    {"source":"ctrl_kyc","target":"bu_compliance","relation":"owned_by","weight":0.8},
+
+    {"source":"reg_aml","target":"pol_aml","relation":"governs","weight":1.0},
+    {"source":"pol_aml","target":"proc_aml","relation":"implements","weight":1.0},
+    {"source":"proc_aml","target":"api_monitoring","relation":"depends_on","weight":1.0},
+    {"source":"api_monitoring","target":"svc_risk","relation":"calls","weight":0.9},
+    {"source":"svc_risk","target":"db_transactions","relation":"reads_from","weight":0.8},
+    {"source":"proc_aml","target":"ctrl_aml","relation":"validated_by","weight":1.0},
+    {"source":"ctrl_aml","target":"audit_q4","relation":"audited_by","weight":0.9},
+    {"source":"audit_q4","target":"db_audit","relation":"stored_in","weight":0.8},
+
+    {"source":"reg_sanctions","target":"pol_sanctions","relation":"governs","weight":1.0},
+    {"source":"pol_sanctions","target":"proc_sanctions","relation":"implements","weight":1.0},
+    {"source":"proc_sanctions","target":"api_sanctions","relation":"depends_on","weight":1.0},
+    {"source":"api_sanctions","target":"db_customers","relation":"reads_from","weight":0.8},
+    {"source":"proc_sanctions","target":"ctrl_sanctions","relation":"validated_by","weight":1.0},
+    {"source":"ctrl_sanctions","target":"audit_q4","relation":"audited_by","weight":0.8},
+
+    {"source":"reg_data","target":"pol_data","relation":"governs","weight":1.0},
+    {"source":"pol_data","target":"proc_audit","relation":"implements","weight":1.0},
+    {"source":"proc_audit","target":"db_audit","relation":"depends_on","weight":0.8},
+
+    {"source":"pol_cross_border","target":"pol_aml","relation":"related_to","weight":0.7},
+    {"source":"proc_payment","target":"proc_aml","relation":"feeds","weight":0.8},
+    {"source":"db_transactions","target":"proc_aml","relation":"supports","weight":0.8}
+  ]
+}
